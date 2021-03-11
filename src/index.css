@@ -3,8 +3,6 @@
 
 @import url(./blocks/page-hover/page-hover.css);
 
-@import url(./blocks/body/body.css);
-
 @import url(./blocks/page/page.css);
 @import url(./blocks/page/__header/page__header.css);
 @import url(./blocks/page/__footer/page__footer.css);

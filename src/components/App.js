@@ -5,12 +5,11 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 
-// поправить стили body
-
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({});
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -24,10 +23,15 @@ function App() {
     setIsEditAvatarPopupOpen(true);
   }
 
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+  }
+
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard({});
   }
 
   return (
@@ -37,6 +41,7 @@ function App() {
         onEditProfile={handleEditProfileClick}        
         onAddPlace={handleAddPlaceClick}        
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       />
       <Footer />
 
@@ -46,14 +51,14 @@ function App() {
         textBtn="Сохранить"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}>
-        <label className="form__field">
-          <input className="form__input popup__edit-name" type="text" name="firstname" placeholder="Имя" minlength="2" maxlength="40" required />
-          <span className="form__tip firstname-error"></span>
-        </label>
-        <label className="form__field">
-          <input className="form__input popup__edit-description" type="text" name="about" placeholder="О себе" minlength="2" maxlength="200" required />
-          <span className="form__tip about-error"></span>
-        </label>
+          <label className="form__field">
+            <input className="form__input popup__edit-name" type="text" name="firstname" placeholder="Имя" minLength="2" maxLength="40" required />
+            <span className="form__tip firstname-error"></span>
+          </label>
+          <label className="form__field">
+            <input className="form__input popup__edit-description" type="text" name="about" placeholder="О себе" minLength="2" maxLength="200" required />
+            <span className="form__tip about-error"></span>
+          </label>
       </PopupWithForm>
 
       <PopupWithForm
@@ -62,10 +67,10 @@ function App() {
         textBtn="Сохранить"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}>
-        <label className="form__field">
-          <input className="form__input popup__edit-description" type="url" name="link-avatar" placeholder="Ссылка на аватар" required />
-          <span className="form__tip link-avatar-error"></span>
-        </label>
+          <label className="form__field">
+            <input className="form__input popup__edit-description" type="url" name="link-avatar" placeholder="Ссылка на аватар" required />
+            <span className="form__tip link-avatar-error"></span>
+          </label>
       </PopupWithForm>
 
       <PopupWithForm
@@ -74,14 +79,14 @@ function App() {
         textBtn="Создать"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}>
-        <label className="form__field">
-          <input className="form__input popup__edit-name" type="text" name="place-name" placeholder="Название" minlength="2" maxlength="30" required />
-          <span className="form__tip place-name-error"></span>
-        </label>
-        <label className="form__field">
-          <input className="form__input popup__edit-description" type="url" name="link-image" placeholder="Ссылка на картинку" required />
-          <span className="form__tip link-image-error"></span>
-        </label>
+          <label className="form__field">
+            <input className="form__input popup__edit-name" type="text" name="place-name" placeholder="Название" minLength="2" maxLength="30" required />
+            <span className="form__tip place-name-error"></span>
+          </label>
+          <label className="form__field">
+            <input className="form__input popup__edit-description" type="url" name="link-image" placeholder="Ссылка на картинку" required />
+            <span className="form__tip link-image-error"></span>
+          </label>
       </PopupWithForm>
 
       <PopupWithForm name="remove-card" title="Вы уверены?" textBtn="Да">
@@ -91,7 +96,10 @@ function App() {
         </label>
       </PopupWithForm> 
 
-      <ImagePopup />
+      <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopups}    
+      />
     </div>
   );
 }
