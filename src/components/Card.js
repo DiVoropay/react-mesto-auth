@@ -1,11 +1,8 @@
-function Card(props) {
-  const card = props.card;
+function Card({card, onCardClick}) {
   const name = card.name;
   const link = card.link;
   const numberOfLikes = card.likes.length;
   const authorsOfLikes = card.likes.reduce((list, item) => { return list + item.name + '\n' }, '');
-  
-  const onCardClick = props.onCardClick;
 
   return (
     <article className="element">

@@ -1,7 +1,6 @@
-function ImagePopup(props) {
-  const name = props.card.name;
-  const link = props.card.link;
-  const onClose = props.onClose;
+function ImagePopup({card, onClose}) {
+  const name = card.name;
+  const link = card.link;
   const isOpen = link ? true : false;
 
   return (

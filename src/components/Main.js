@@ -3,11 +3,7 @@ import avatar from '../images/profile/avatar.png';
 import api from '../utils/api';
 import Card from './Card';
 
-function Main(props) {
-  const onEditProfile = props.onEditProfile;
-  const onAddPlace = props.onAddPlace;
-  const onEditAvatar = props.onEditAvatar;
-  const onCardClick = props.onCardClick;
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
   const [userName, setUserName] = React.useState();
   const [userDescription , setUserDescription ] = React.useState();
