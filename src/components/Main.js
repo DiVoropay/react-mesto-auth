@@ -2,23 +2,13 @@ import React from 'react';
 import avatar from '../images/profile/avatar.png';
 import api from '../utils/api';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
-
-  const [userName, setUserName] = React.useState();
-  const [userDescription , setUserDescription ] = React.useState();
-  const [userAvatar, setUserAvatar] = React.useState();
   const [cards, setCards] = React.useState([]);
+  const currentUser = React.useContext(CurrentUserContext);
 
-  React.useEffect( () => {
-    api.getPrifile()
-      .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((err) => { console.log(`Ошибка: ${err}`) });
-    
+  React.useEffect( () => {    
     api.getInitialCards()
       .then((data) => {
         setCards(data);
@@ -32,16 +22,16 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
       <section className="profile content__profile">
         <button className="profile__edit-avatar"  onClick={onEditAvatar} type="button">
-          <img className="profile__avatar" src={userAvatar ? userAvatar : avatar}  alt="Фотография профиля"/>
+          <img className="profile__avatar" src={currentUser.avatar ? currentUser.avatar : avatar}  alt="Фотография профиля"/>
           <div className="profile__edit-icon"></div>
         </button>
 
         <div className="profile__info">
           <div className="profile__flex-row">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser.name}</h1>
             <button className="profile__edit-button page-hover" onClick={onEditProfile} type="button"></button>
           </div>
-          <p className="profile__description">{userDescription}</p>
+          <p className="profile__description">{currentUser.about}</p>
         </div>
         <button className="profile__add-button page-hover"  onClick={onAddPlace} type="button"></button>
       </section>
