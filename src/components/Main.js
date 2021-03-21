@@ -17,6 +17,12 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
   },[]);
 
+  function handleCardLike(card, isLiked) {    
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+} 
+
   return (    
     <main className="content">
 
@@ -42,6 +48,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
                 key={card._id}
                 card={card}
                 onCardClick={onCardClick}
+                onCardLike={handleCardLike}
               />
             )
           )
