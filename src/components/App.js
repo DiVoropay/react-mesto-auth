@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import EditProfilePopup from './EditProfilePopup';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
@@ -58,21 +59,10 @@ function App() {
         />
         <Footer />
 
-        <PopupWithForm
-          name="edit-profile"
-          title="Редактировать профиль"
-          textBtn="Сохранить"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}>
-            <label className="form__field">
-              <input className="form__input popup__edit-name" type="text" name="firstname" placeholder="Имя" minLength="2" maxLength="40" required />
-              <span className="form__tip firstname-error"></span>
-            </label>
-            <label className="form__field">
-              <input className="form__input popup__edit-description" type="text" name="about" placeholder="О себе" minLength="2" maxLength="200" required />
-              <span className="form__tip about-error"></span>
-            </label>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+        /> 
 
         <PopupWithForm
           name="edit-avatar"

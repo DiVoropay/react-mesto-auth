@@ -1,7 +1,7 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Card({card, onCardClick, onCardLike}) {
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const name = card.name;
@@ -23,6 +23,10 @@ function Card({card, onCardClick, onCardLike}) {
     //в случае параллельной работы из нескольких приложений
   }
 
+  function handleDeleteClick() {
+    onCardDelete(card);
+  }
+
   return (
     <article className="element">
       <img className="element__image" src={link} alt={name} onClick={handleClick}/>
@@ -37,7 +41,7 @@ function Card({card, onCardClick, onCardLike}) {
           </p>
         </div>
       </div>
-      <button className={`element__trash page-hover${!isOwn && ' element__trash_hidden'}`} type="button"></button>
+      <button className={`element__trash page-hover${!isOwn && ' element__trash_hidden'}`} onClick={handleDeleteClick} type="button"></button>
     </article>
   );  
 }

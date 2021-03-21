@@ -19,9 +19,15 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
   function handleCardLike(card, isLiked) {    
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
     });
-} 
+  }
+
+  function handleCardDelete(card) {
+    api.removeCard(card._id).then(() => {
+      setCards((cards) => cards.filter((c) => c._id !== card._id));
+    });
+  }
 
   return (    
     <main className="content">
@@ -49,6 +55,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
                 card={card}
                 onCardClick={onCardClick}
                 onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
               />
             )
           )
