@@ -38,6 +38,15 @@ function App() {
     setSelectedCard({});
   }
 
+  const handleUpdateUser = (data) => {
+    api.setUserInfo(data)
+    .then((data) => {
+      setCurrentUser(data);
+      closeAllPopups();
+    })
+    .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
   React.useEffect( () => {
     api.getPrifile()
       .then((data) => {
@@ -62,6 +71,7 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
         /> 
 
         <PopupWithForm

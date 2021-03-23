@@ -20,7 +20,7 @@ class Api {
       .then(this._checkResponse);
   }
 
-  editPrifile(data) {
+  setUserInfo(data) {
 
     return fetch(`${this._baseUrl}/users/me `, {
       method: 'PATCH',
