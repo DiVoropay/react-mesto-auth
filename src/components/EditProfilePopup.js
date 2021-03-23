@@ -29,13 +29,19 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser}) {
     });
   }
 
+  const handleClose = () => {
+    onClose();
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }
+
   return (
     <PopupWithForm
       name="edit-profile"
       title="Редактировать профиль"
       textBtn="Сохранить"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit}>
         <label className="form__field">
           <input className="form__input popup__edit-name"

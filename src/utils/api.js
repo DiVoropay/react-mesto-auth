@@ -30,7 +30,7 @@ class Api {
       .then(this._checkResponse);
   }
 
-  editAvatar(data) {
+  setUserAvatar(data) {
 
     return fetch(`${this._baseUrl}/users/me/avatar `, {
       method: 'PATCH',

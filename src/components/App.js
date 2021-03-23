@@ -3,6 +3,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
@@ -47,6 +48,15 @@ function App() {
     .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
+  const handleUpdateAvatar = (data) => {
+    api.setUserAvatar(data)
+    .then((data) => {
+      setCurrentUser(data);
+      closeAllPopups();
+    })
+    .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
   React.useEffect( () => {
     api.getPrifile()
       .then((data) => {
@@ -72,19 +82,13 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
-        /> 
+        />
 
-        <PopupWithForm
-          name="edit-avatar"
-          title="Обновить аватар"
-          textBtn="Сохранить"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}>
-            <label className="form__field">
-              <input className="form__input popup__edit-description" type="url" name="link-avatar" placeholder="Ссылка на аватар" required />
-              <span className="form__tip link-avatar-error"></span>
-            </label>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
         <PopupWithForm
           name="add-card"
