@@ -6,6 +6,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -65,6 +66,42 @@ function App() {
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   },[]);
 
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect( () => {    
+    api.getInitialCards()
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+
+  },[]);
+
+  function handleCardLike(card, isLiked) {    
+    api.changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
+  function handleCardDelete(card) {
+    api.removeCard(card._id)
+      .then(() => {
+        setCards((cards) => cards.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
+  function handleAddPlaceSubmit(card) {
+    api.addCard(card)
+      .then((newCard) => {        
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
 
   return (
     <div className="page">
@@ -75,6 +112,9 @@ function App() {
           onAddPlace={handleAddPlaceClick}        
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
         />
         <Footer />
 
@@ -90,21 +130,11 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
 
-        <PopupWithForm
-          name="add-card"
-          title="Новое место"
-          textBtn="Создать"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}>
-            <label className="form__field">
-              <input className="form__input popup__edit-name" type="text" name="place-name" placeholder="Название" minLength="2" maxLength="30" required />
-              <span className="form__tip place-name-error"></span>
-            </label>
-            <label className="form__field">
-              <input className="form__input popup__edit-description" type="url" name="link-image" placeholder="Ссылка на картинку" required />
-              <span className="form__tip link-image-error"></span>
-            </label>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onAddPlace={handleAddPlaceSubmit}
+        />
 
         <PopupWithForm name="remove-card" title="Вы уверены?" textBtn="Да">
           <label className="form__field">

@@ -46,7 +46,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser}) {
         <label className="form__field">
           <input className="form__input popup__edit-name"
             onChange={handleChangeName}
-            value={name}
+            //value={name}
             type="text" name="firstname"
             placeholder="Имя"
             minLength="2"
@@ -58,7 +58,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser}) {
         <label className="form__field">
           <input className="form__input popup__edit-description"
             onChange={handleChangeDescription}
-            value={description}
+            //value={description}
             type="text"
             name="about"
             placeholder="О себе"
