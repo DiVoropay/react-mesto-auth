@@ -14,18 +14,23 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     setLink(e.target.value);
   }
 
+  const resetInputs = () => {
+    setName('');
+    setLink('');
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onAddPlace({
       name,
       link
     });
+    resetInputs();
   }
 
   const handleClose = () => {
     onClose();
-    setName('');
-    setLink('');
+    resetInputs();
   }
 
 
@@ -40,6 +45,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       <label className="form__field">
         <input className="form__input popup__edit-name"
           onChange={handleChangeName}
+          value={name || ''}
           type="text"
           name="place-name"
           placeholder="Название"
@@ -52,6 +58,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       <label className="form__field">
         <input className="form__input popup__edit-description"
           onChange={handleChangeLink}
+          value={link || ''}
           type="url"
           name="link-image"
           placeholder="Ссылка на картинку"
