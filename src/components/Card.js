@@ -35,13 +35,13 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
           {name}
         </h2>
         <div className="element__like-block">
-          <button className={`element__like page-hover${isLiked && ' element__like_active'}`} onClick={handleLikeClick} type="button"></button>
+          <button className={`element__like page-hover${isLiked ? ' element__like_active' : ''}`} onClick={handleLikeClick} type="button"></button>
           <p className="element__like-count" title={authorsOfLikes}>
             {numberOfLikes}
           </p>
         </div>
       </div>
-      <button className={`element__trash page-hover${!isOwn && ' element__trash_hidden'}`} onClick={handleDeleteClick} type="button"></button>
+      <button className={`element__trash page-hover${!isOwn ? ' element__trash_hidden' : ''}`} onClick={handleDeleteClick} type="button"></button>
     </article>
   );
 }
