@@ -19,12 +19,12 @@ function App() {
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
-  } 
+  }
 
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   }
-  
+
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   }
@@ -42,42 +42,42 @@ function App() {
 
   const handleUpdateUser = (data) => {
     api.setUserInfo(data)
-    .then((data) => {
-      setCurrentUser(data);
-      closeAllPopups();
-    })
-    .catch((err) => { console.log(`Ошибка: ${err}`) });
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
   const handleUpdateAvatar = (data) => {
     api.setUserAvatar(data)
-    .then((data) => {
-      setCurrentUser(data);
-      closeAllPopups();
-    })
-    .catch((err) => { console.log(`Ошибка: ${err}`) });
+      .then((data) => {
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     api.getPrifile()
       .then((data) => {
         setCurrentUser(data);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
-  },[]);
+  }, []);
 
   const [cards, setCards] = React.useState([]);
 
-  React.useEffect( () => {    
+  React.useEffect(() => {
     api.getInitialCards()
       .then((data) => {
         setCards(data);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
 
-  },[]);
+  }, []);
 
-  function handleCardLike(card, isLiked) {    
+  function handleCardLike(card, isLiked) {
     api.changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
         setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
@@ -95,7 +95,7 @@ function App() {
 
   function handleAddPlaceSubmit(card) {
     api.addCard(card)
-      .then((newCard) => {        
+      .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
@@ -105,11 +105,11 @@ function App() {
 
   return (
     <div className="page">
-      <CurrentUserContext.Provider value={currentUser}>        
+      <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
-          onEditProfile={handleEditProfileClick}        
-          onAddPlace={handleAddPlaceClick}        
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           cards={cards}
@@ -141,11 +141,11 @@ function App() {
             <input className="form__input popup__edit-description" type="url" name="link-avatar" placeholder="Ссылка на аватар" required />
             <span className="form__tip link-avatar-error"></span>
           </label>
-        </PopupWithForm> 
+        </PopupWithForm>
 
         <ImagePopup
           card={selectedCard}
-          onClose={closeAllPopups}    
+          onClose={closeAllPopups}
         />
       </CurrentUserContext.Provider>
     </div>

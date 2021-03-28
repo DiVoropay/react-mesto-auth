@@ -29,10 +29,10 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
   return (
     <article className="element">
-      <img className="element__image" src={link} alt={name} onClick={handleClick}/>
+      <img className="element__image" src={link} alt={name} onClick={handleClick} />
       <div className="element__description">
         <h2 className="element__title" title={name}>
-        {name}
+          {name}
         </h2>
         <div className="element__like-block">
           <button className={`element__like page-hover${isLiked && ' element__like_active'}`} onClick={handleLikeClick} type="button"></button>
@@ -43,7 +43,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
       </div>
       <button className={`element__trash page-hover${!isOwn && ' element__trash_hidden'}`} onClick={handleDeleteClick} type="button"></button>
     </article>
-  );  
+  );
 }
 
 export default Card;

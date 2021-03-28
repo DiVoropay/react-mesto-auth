@@ -1,4 +1,4 @@
-function ImagePopup({card, onClose}) {
+function ImagePopup({ card, onClose }) {
   const name = card.name;
   const link = card.link;
   const isOpen = link ? true : false;
@@ -8,7 +8,7 @@ function ImagePopup({card, onClose}) {
       <div className="viewer">
         <figure className="viewer__container">
           <button className="popup__close page-hover" onClick={onClose} type="reset"></button>
-          <img className="viewer__image" src={link} alt={name}/>
+          <img className="viewer__image" src={link} alt={name} />
           <figcaption className="viewer__title">{name}</figcaption>
         </figure>
       </div>
