@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -9,6 +10,8 @@ import ImagePopup from './ImagePopup';
 import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import Register from './Register';
+import Login from './Login';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -16,6 +19,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(true);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -107,15 +111,31 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
+        <Switch>
+          <Route path="/sign-up">
+            <Register />            
+          </Route>
+          <Route path="/sign-in">
+            <Login />            
+          </Route>
+          <Route path="/main">
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />          
+          </Route>
+
+          <Route exact path="/">
+              {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
+          </Route>
+
+        </Switch>
+
         <Footer />
 
         <EditProfilePopup
