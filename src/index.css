@@ -12,6 +12,7 @@
 
 @import url(./blocks/navigation/navigation.css);
 @import url(./blocks/navigation/__link/navigation__link.css);
+@import url(./blocks/navigation/__link/_white/navigation__link_white.css);
 
 @import url(./blocks/sign/sign.css);
 

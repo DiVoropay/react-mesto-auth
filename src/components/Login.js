@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from './Form';
 
-function Login({ onRegisterUser}) {
+function Login({ onLoginUser }) {
 
   const [email, setEmail] = React.useState();
   const [password, setPassword] = React.useState();
@@ -16,9 +16,9 @@ function Login({ onRegisterUser}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegisterUser({
-      email,
-      password
+    onLoginUser({
+      password,
+      email      
     });
   }
 

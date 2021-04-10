@@ -17,8 +17,8 @@ function Register({ onRegisterUser}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onRegisterUser({
-      email,
-      password
+      password,
+      email      
     });
   }
 

@@ -9,7 +9,9 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
+import signApi from '../utils/signApi';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
 
@@ -19,7 +21,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -106,6 +108,24 @@ function App() {
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
+  const handleRegisterUser = (data) => {
+    signApi.register(data)
+      .then((data) => {
+        //setCurrentUser(data);
+        console.log(data);
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
+  const handleLoginUser = (data) => {
+    signApi.login(data)
+      .then((data) => {
+        //setCurrentUser(data);
+        console.log(data);
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
 
   return (
     <div className="page">
@@ -113,22 +133,29 @@ function App() {
         <Header />
         <Switch>
           <Route path="/sign-up">
-            <Register />            
+            <Register
+              onRegisterUser={handleRegisterUser}           
+            />            
           </Route>
           <Route path="/sign-in">
-            <Login />            
+            <Login
+              onLoginUser={handleLoginUser}
+            
+            />            
           </Route>
-          <Route path="/main">
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            />          
-          </Route>
+          <ProtectedRoute
+            path="/main"
+            loggedIn={loggedIn}
+            component = {Main}
+            
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          /> 
 
           <Route exact path="/">
               {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
