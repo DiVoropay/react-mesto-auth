@@ -14,7 +14,7 @@ function Form({ name, title, textBtn, children, onSubmit }) {
           {textBtn}
         </button>
         <Route path="/sign-up">
-          <Link className="form__link form__link_white" to="./sign-in">Уже зарегистрированы? Войти</Link>
+          <Link className="form__link form__link_white page-hover" to="./sign-in">Уже зарегистрированы? Войти</Link>
         </Route>        
       </form>
     </div>
