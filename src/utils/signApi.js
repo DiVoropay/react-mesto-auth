@@ -11,7 +11,7 @@ class SignApi {
     return Promise.reject(`Ошибка ${res.status}`);
   }
 
-  getPrifile(token) {
+  authorization(token) {
 
     return fetch(`${this._baseUrl}/users/me `, {
       method: 'GET',

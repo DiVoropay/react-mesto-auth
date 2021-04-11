@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -8,6 +8,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import AddPlacePopup from './AddPlacePopup';
+import InfoTooltip from './InfoTooltip';
 import api from '../utils/api';
 import signApi from '../utils/signApi';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -19,9 +20,12 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const history = useHistory();
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -43,6 +47,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
   }
 
@@ -64,24 +69,6 @@ function App() {
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
-  React.useEffect(() => {
-    api.getPrifile()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => { console.log(`Ошибка: ${err}`) });
-  }, []);
-
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((err) => { console.log(`Ошибка: ${err}`) });
-
-  }, []);
 
   function handleCardLike(card, isLiked) {
     api.changeLikeCardStatus(card._id, isLiked)
@@ -108,40 +95,88 @@ function App() {
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
+  const [isSuccessful, setIsSuccessful] = React.useState(false);
+
   const handleRegisterUser = (data) => {
     signApi.register(data)
       .then((data) => {
-        //setCurrentUser(data);
         console.log(data);
+        setIsSuccessful(true);
+        setIsInfoTooltipOpen(true);
+        history.push('./sign-in');
       })
-      .catch((err) => { console.log(`Ошибка: ${err}`) });
+      .catch((err) => {
+        setIsSuccessful(false);
+        setIsInfoTooltipOpen(true);
+        console.log(`Ошибка: ${err}`)
+      });
   }
 
   const handleLoginUser = (data) => {
     signApi.login(data)
       .then((data) => {
-        //setCurrentUser(data);
         console.log(data);
+        setLoggedIn(true);
+        history.push('./main');
+        localStorage.setItem('token', data.token);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
+  const handleAuthorizationUser = (token) => {
+    signApi.authorization(token)
+      .then((data) => {
+        setCurrentUser({...currentUser, email: data.data.email});
+        console.log(currentUser);
+        setLoggedIn(true);
+        history.push('./main');
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }
+
+  const handleExitUser = () => {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+  }  
+
+  React.useEffect(() => {
+    handleAuthorizationUser(localStorage.getItem('token'))
+    api.getPrifile()
+      .then((data) => {
+
+        setCurrentUser({...currentUser, ...data});
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }, []);
+
+  React.useEffect(() => {
+    api.getInitialCards()
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((err) => { console.log(`Ошибка: ${err}`) });
+  }, []);
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+        <Header
+          onExitUser={handleExitUser}
+        />
         <Switch>
           <Route path="/sign-up">
-            <Register
-              onRegisterUser={handleRegisterUser}           
-            />            
+            {loggedIn ? <Redirect to="/main" /> : 
+              <Register
+                onRegisterUser={handleRegisterUser}           
+              />
+            }           
           </Route>
           <Route path="/sign-in">
-            <Login
-              onLoginUser={handleLoginUser}
-            
-            />            
+            {loggedIn ? <Redirect to="/main" /> : 
+              <Login
+                onLoginUser={handleLoginUser}            
+              />
+            }          
           </Route>
           <ProtectedRoute
             path="/main"
@@ -182,6 +217,12 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
         />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          isSuccessful={isSuccessful}
+        />        
 
         <PopupWithForm name="remove-card" title="Вы уверены?" textBtn="Да">
           <label className="form__field">
