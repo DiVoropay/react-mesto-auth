@@ -36,6 +36,8 @@
 @import url(./blocks/form/__button-submit/form__button-submit.css);
 @import url(./blocks/form/__button-submit/_black/form__button-submit_black.css);
 @import url(./blocks/form/__tip/_active/form__tip_active.css);
+@import url(./blocks/form/__link/form__link.css);
+@import url(./blocks/form/__link/_white/form__link_white.css);
 
 @import url(./blocks/viewer/viewer.css);
 @import url(./blocks/viewer/__container/viewer__container.css);

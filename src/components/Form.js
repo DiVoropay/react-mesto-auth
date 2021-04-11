@@ -1,3 +1,6 @@
+import React from 'react';
+import {Link, Route } from 'react-router-dom';
+
 function Form({ name, title, textBtn, children, onSubmit }) {
 
   return (
@@ -10,6 +13,9 @@ function Form({ name, title, textBtn, children, onSubmit }) {
         <button className="form__button-submit page-hover" type="submit">
           {textBtn}
         </button>
+        <Route path="/sign-up">
+          <Link className="form__link form__link_white" to="./sign-in">Уже зарегистрированы? Войти</Link>
+        </Route>        
       </form>
     </div>
   );

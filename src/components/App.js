@@ -25,6 +25,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isSuccessful, setIsSuccessful] = React.useState(false);
   const history = useHistory();
 
   const handleEditProfileClick = () => {
@@ -51,11 +52,15 @@ function App() {
     setSelectedCard({});
   }
 
+  const updateCurrentUser = (data) => {
+    const currentUserAdvanced = {...currentUser, ...data};
+    setCurrentUser(currentUserAdvanced);
+  }
+
   const handleUpdateUser = (data) => {
     api.setUserInfo(data)
       .then((data) => {
-        const currentUserAdvanced = {...data, email: currentUser.email};
-        setCurrentUser(currentUserAdvanced);
+        updateCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
@@ -64,8 +69,7 @@ function App() {
   const handleUpdateAvatar = (data) => {
     api.setUserAvatar(data)
       .then((data) => {
-        const currentUserAdvanced = {...data, email: currentUser.email};
-        setCurrentUser(currentUserAdvanced);
+        updateCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
@@ -97,8 +101,6 @@ function App() {
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
 
-  const [isSuccessful, setIsSuccessful] = React.useState(false);
-
   const handleRegisterUser = (data) => {
     signApi.register(data)
       .then((data) => {
@@ -128,8 +130,7 @@ function App() {
   const handleAuthorizationUser = (token) => {
     signApi.authorization(token)
       .then((data) => {
-        const currentUserAdvanced = {...currentUser, email: data.data.email};
-        setCurrentUser(currentUserAdvanced);
+        updateCurrentUser(data.data);
         setLoggedIn(true);
         history.push('./main');
       })
@@ -142,15 +143,16 @@ function App() {
   }
 
   React.useEffect(() => {
-    handleAuthorizationUser(localStorage.getItem('token'))
-    
+    const token = localStorage.getItem('token');
+    if (token) {
+      handleAuthorizationUser(token);
+    }    
   }, []);
 
   React.useEffect(() => {
     api.getPrifile()
       .then((data) => {
-        const currentUserAdvanced = {...data, email: currentUser.email};
-        setCurrentUser(currentUserAdvanced);
+        updateCurrentUser(data);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }, [loggedIn]);
@@ -167,7 +169,7 @@ function App() {
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <Header
-          onExitUser={handleExitUser}
+          onSignOut={handleExitUser}
         />
         <Switch>
           <Route path="/sign-up">

@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Header({ onExitUser }) {
+function Header({ onSignOut }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   return (
@@ -19,7 +19,7 @@ function Header({ onExitUser }) {
           </Route>
           <Route path="/main">
             <p className="navigation__link navigation__link_white">{currentUser.email}</p>
-            <button className="navigation__link navigation__link_white navigation__button page-hover" onClick={onExitUser} type="reset">Выйти</button>      
+            <button className="navigation__link navigation__link_white navigation__button page-hover" onClick={onSignOut} type="reset">Выйти</button>      
           </Route>
         </Switch>
       </nav>
