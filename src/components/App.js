@@ -54,7 +54,8 @@ function App() {
   const handleUpdateUser = (data) => {
     api.setUserInfo(data)
       .then((data) => {
-        setCurrentUser(data);
+        const currentUserAdvanced = {...data, email: currentUser.email};
+        setCurrentUser(currentUserAdvanced);
         closeAllPopups();
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
@@ -63,7 +64,8 @@ function App() {
   const handleUpdateAvatar = (data) => {
     api.setUserAvatar(data)
       .then((data) => {
-        setCurrentUser(data);
+        const currentUserAdvanced = {...data, email: currentUser.email};
+        setCurrentUser(currentUserAdvanced);
         closeAllPopups();
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
@@ -126,8 +128,8 @@ function App() {
   const handleAuthorizationUser = (token) => {
     signApi.authorization(token)
       .then((data) => {
-        setCurrentUser({...currentUser, email: data.data.email});
-        console.log(currentUser);
+        const currentUserAdvanced = {...currentUser, email: data.data.email};
+        setCurrentUser(currentUserAdvanced);
         setLoggedIn(true);
         history.push('./main');
       })
@@ -137,17 +139,21 @@ function App() {
   const handleExitUser = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
-  }  
+  }
 
   React.useEffect(() => {
     handleAuthorizationUser(localStorage.getItem('token'))
+    
+  }, []);
+
+  React.useEffect(() => {
     api.getPrifile()
       .then((data) => {
-
-        setCurrentUser({...currentUser, ...data});
+        const currentUserAdvanced = {...data, email: currentUser.email};
+        setCurrentUser(currentUserAdvanced);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
-  }, []);
+  }, [loggedIn]);
 
   React.useEffect(() => {
     api.getInitialCards()
@@ -155,7 +161,7 @@ function App() {
         setCards(data);
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
-  }, []);
+  }, [loggedIn]);
 
   return (
     <div className="page">
