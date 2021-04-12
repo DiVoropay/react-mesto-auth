@@ -23,6 +23,7 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
+  const [emailUser, setEmailUser] = React.useState();
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isSuccessful, setIsSuccessful] = React.useState(false);
@@ -53,7 +54,7 @@ function App() {
   }
 
   const updateCurrentUser = (data) => {
-    const currentUserAdvanced = {...currentUser, ...data};
+    const currentUserAdvanced = {...data, email: emailUser};
     setCurrentUser(currentUserAdvanced);
   }
 
@@ -130,7 +131,7 @@ function App() {
   const handleAuthorizationUser = (token) => {
     signApi.authorization(token)
       .then((data) => {
-        updateCurrentUser(data.data);
+        setEmailUser(data.data.email);
         setLoggedIn(true);
         history.push('./main');
       })
@@ -200,7 +201,7 @@ function App() {
             onCardDelete={handleCardDelete}
           /> 
 
-          <Route exact path="/">
+          <Route path="/">
               {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
           </Route>
 
@@ -230,6 +231,8 @@ function App() {
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
           isSuccessful={isSuccessful}
+          msgSuccessful="Вы успешно зарегистрировались!" 
+          msgError="Что-то пошло не так! Попробуйте ещё раз."
         />        
 
         <PopupWithForm name="remove-card" title="Вы уверены?" textBtn="Да">

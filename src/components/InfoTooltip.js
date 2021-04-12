@@ -1,7 +1,7 @@
 import unionV from '../images/popup-info/union-v.svg';
 import unionX from '../images/popup-info/union-x.svg';
 
-function InfoTooltip({ isSuccessful, isOpen, onClose }) {
+function InfoTooltip({ isSuccessful, isOpen, onClose, msgSuccessful, msgError }) {
 
   return (
     <div className={`popup` + (isOpen ? " popup_opened" : "")}>
@@ -10,8 +10,8 @@ function InfoTooltip({ isSuccessful, isOpen, onClose }) {
         <img className="popup__info-image" src={ isSuccessful ? unionV : unionX } alt="Изображение статуса сообщения"/>
         <p className="popup__info-message">
           {isSuccessful
-            ? "Вы успешно зарегистрировались!"
-            : "Что-то пошло не так! Попробуйте ещё раз."
+            ? msgSuccessful
+            : msgError
           }
         </p>
       </div>
