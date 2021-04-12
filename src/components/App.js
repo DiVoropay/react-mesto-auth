@@ -117,13 +117,19 @@ function App() {
       });
   }
 
+  const loginByToken = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      handleAuthorizationUser(token);
+    }    
+  }
+
   const handleLoginUser = (data) => {
     signApi.login(data)
       .then((data) => {
-        console.log(data);
-        setLoggedIn(true);
         history.push('./main');
         localStorage.setItem('token', data.token);
+        loginByToken();
       })
       .catch((err) => { console.log(`Ошибка: ${err}`) });
   }
@@ -144,10 +150,7 @@ function App() {
   }
 
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      handleAuthorizationUser(token);
-    }    
+    loginByToken();
   }, []);
 
   React.useEffect(() => {
